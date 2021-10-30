@@ -2,5 +2,5 @@ package com.allchat.allchat.domain.chatRoom;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface RoomRepository extends JpaRepository<Room, Long> {
+public interface ChatRoomRepository extends JpaRepository<ChatRoom, Long> {
 }

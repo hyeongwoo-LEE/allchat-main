@@ -1,6 +1,6 @@
 package com.allchat.allchat.domain.chatRoomJoin;
 
-import com.allchat.allchat.domain.chatRoom.Room;
+import com.allchat.allchat.domain.chatRoom.ChatRoom;
 import com.allchat.allchat.domain.user.User;
 import lombok.*;
 
@@ -23,8 +23,8 @@ public class ChatRoomJoin {
     private User user;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "room_id", nullable = false)
-    private Room room;
+    @JoinColumn(name = "chat_room_id", nullable = false)
+    private ChatRoom chatRoom;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
