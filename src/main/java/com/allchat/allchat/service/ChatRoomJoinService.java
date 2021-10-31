@@ -16,6 +16,9 @@ public class ChatRoomJoinService {
 
     private final ChatRoomJoinRepository chatRoomJoinRepository;
 
+    /**
+     * 채팅방 참여
+     */
     @Transactional
     public ChatRoomJoin join(Long chatRoomId, Long principalId){
 
@@ -30,6 +33,9 @@ public class ChatRoomJoinService {
         return chatRoomJoin;
     }
 
+    /**
+     * 채팅방 나가기
+     */
     @Transactional
     public void remove(Long chatRoomId, Long principalId){
         

@@ -18,6 +18,9 @@ public class ChatRoomService {
     private final ChatRoomRepository chatRoomRepository;
     private final ChatRoomJoinRepository chatRoomJoinRepository;
 
+    /**
+     * 채팅방 생성
+     */
     @Transactional
     public ChatRoom create(String title, Long principalId){
 
