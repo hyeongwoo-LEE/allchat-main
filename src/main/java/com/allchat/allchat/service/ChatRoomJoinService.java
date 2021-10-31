@@ -16,6 +16,7 @@ public class ChatRoomJoinService {
 
     private final ChatRoomJoinRepository chatRoomJoinRepository;
 
+    @Transactional
     public ChatRoomJoin join(Long chatRoomId, Long principalId){
 
         ChatRoomJoin chatRoomJoin = ChatRoomJoin.builder()
@@ -27,6 +28,13 @@ public class ChatRoomJoinService {
         chatRoomJoinRepository.save(chatRoomJoin);
 
         return chatRoomJoin;
+    }
+
+    @Transactional
+    public void remove(Long chatRoomId, Long principalId){
+        
+        chatRoomJoinRepository.delete(chatRoomId, principalId);
+
     }
 
 }
