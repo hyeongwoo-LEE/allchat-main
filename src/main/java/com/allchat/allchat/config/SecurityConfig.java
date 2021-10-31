@@ -1,5 +1,6 @@
 package com.allchat.allchat.config;
 
+import com.allchat.allchat.filter.LoginFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
@@ -21,17 +22,21 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
 
-        http.formLogin().disable();
-        http.httpBasic().disable();
-
-        //세션 사용 x (
+        //세션 사용 x
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 
+        http.formLogin().disable();
+        http.httpBasic().disable();
         http.csrf().disable(); //세션 사용 x
+
+
+        http
+            .addFilter(new LoginFilter(authenticationManager()));
 
         http.authorizeRequests()
                 .antMatchers("/auth/**").permitAll()
                 .anyRequest().authenticated(); // /auth/** 이외 모두 인증 필수.
+
 
     }
 }
