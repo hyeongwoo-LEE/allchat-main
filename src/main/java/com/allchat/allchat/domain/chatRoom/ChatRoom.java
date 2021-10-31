@@ -8,16 +8,15 @@ import org.springframework.stereotype.Component;
 import javax.persistence.*;
 
 @Getter
-@Setter
 @ToString
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-public class Room extends BaseEntity {
+public class ChatRoom extends BaseEntity {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long roomId;
+    private Long chatRoomId;
 
     @Column(nullable = false)
     private String title;
