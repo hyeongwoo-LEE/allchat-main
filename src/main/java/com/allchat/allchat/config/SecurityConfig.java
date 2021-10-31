@@ -4,7 +4,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -21,17 +20,18 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
+
+        http.formLogin().disable();
         http.httpBasic().disable();
 
         //세션 사용 x (
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 
         http.csrf().disable(); //세션 사용 x
-        http.formLogin().disable();
 
         http.authorizeRequests()
                 .antMatchers("/auth/**").permitAll()
-                .anyRequest().authenticated(); //로그인, 회원가입 이외 모두 인증 필수.
+                .anyRequest().authenticated(); // /auth/** 이외 모두 인증 필수.
 
     }
 }
