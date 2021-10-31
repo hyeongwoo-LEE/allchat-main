@@ -8,7 +8,6 @@ import org.springframework.stereotype.Component;
 import javax.persistence.*;
 
 @Getter
-@Setter
 @ToString
 @Builder
 @AllArgsConstructor

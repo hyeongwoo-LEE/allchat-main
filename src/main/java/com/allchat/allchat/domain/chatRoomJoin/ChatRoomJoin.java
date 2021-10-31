@@ -7,8 +7,7 @@ import lombok.*;
 import javax.persistence.*;
 
 @Getter
-@Setter
-@ToString(exclude = {"user","room"})
+@ToString(exclude = {"user","chatRoom"})
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
