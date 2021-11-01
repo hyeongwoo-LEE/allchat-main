@@ -67,7 +67,7 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
         System.out.println("성공!!!!!!!");
 
         PrincipalDetails principalDetails = (PrincipalDetails) authResult.getPrincipal();
-        //TODO jwt 발급
+
         String jwtToken = jwtUtil.generateToken(principalDetails.getUser().getUserId());
 
         LoginResDTO loginResDTO = LoginResDTO.builder()

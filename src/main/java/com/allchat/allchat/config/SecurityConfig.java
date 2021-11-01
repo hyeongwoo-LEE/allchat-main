@@ -1,5 +1,6 @@
 package com.allchat.allchat.config;
 
+import com.allchat.allchat.config.auth.oauth.OAuth2DetailsService;
 import com.allchat.allchat.domain.user.UserRepository;
 import com.allchat.allchat.filter.JwtAuthenticationEntryPoint;
 import com.allchat.allchat.filter.JwtAuthorizationFilter;
@@ -24,6 +25,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
     private final UserRepository userRepository;
+    private final OAuth2DetailsService oAuth2DetailsService;
 
     @Bean
     public PasswordEncoder encode(){
@@ -45,6 +47,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.httpBasic().disable();
         http.csrf().disable(); //세션 사용 x
 
+        http.authorizeRequests()
+                .antMatchers("/auth/**").permitAll()
+                .anyRequest().authenticated(); // /auth/** 이외 모두 인증 필수.
 
         http.addFilter(new LoginFilter(authenticationManager(), jwtUtil()))
                 .addFilter(new JwtAuthorizationFilter(authenticationManager(), jwtUtil(), userRepository));
@@ -52,9 +57,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.exceptionHandling()
                 .authenticationEntryPoint(jwtAuthenticationEntryPoint);
 
-        http.authorizeRequests()
-                .antMatchers("/auth/**").permitAll()
-                .anyRequest().authenticated(); // /auth/** 이외 모두 인증 필수.
+        http.oauth2Login()
+                .userInfoEndpoint().userService(oAuth2DetailsService)
+                .and()
+//                .successHandler()
+//                .failureHandler()
+                .permitAll();
 
 
     }

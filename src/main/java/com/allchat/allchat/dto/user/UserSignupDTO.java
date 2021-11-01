@@ -20,12 +20,12 @@ public class UserSignupDTO {
     @NotBlank
     private String password;
 
-    public User toEntity(){
+    public User toEntity(Boolean isFromSocial){
 
         User user = User.builder()
                 .username(username)
                 .password(password)
-                .isFromSocial(false)
+                .isFromSocial(isFromSocial)
                 .build();
 
         return user;

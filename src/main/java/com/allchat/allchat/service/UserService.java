@@ -2,6 +2,7 @@ package com.allchat.allchat.service;
 
 import com.allchat.allchat.domain.user.User;
 import com.allchat.allchat.domain.user.UserRepository;
+import com.allchat.allchat.dto.user.UserDTO;
 import com.allchat.allchat.dto.user.UserSignupDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -45,11 +46,25 @@ public class UserService {
 
         userSignupDTO.setPassword(encPassword);
 
-        User user = userRepository.save(userSignupDTO.toEntity());
+        User user = userRepository.save(userSignupDTO.toEntity(false));
 
         return user;
     }
 
+    /**
+     * 카카오 회원가입
+     */
+    public User kakaoJoin(UserSignupDTO userSignupDTO){
+
+        String rawPassword = userSignupDTO.getPassword();
+        String encPassword = passwordEncoder.encode(rawPassword);
+
+        userSignupDTO.setPassword(encPassword);
+
+        User user = userRepository.save(userSignupDTO.toEntity(true));
+
+        return user;
+    }
 
 
 }
