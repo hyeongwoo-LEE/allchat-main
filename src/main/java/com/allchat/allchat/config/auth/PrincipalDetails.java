@@ -1,6 +1,7 @@
 package com.allchat.allchat.config.auth;
 
 import com.allchat.allchat.domain.user.User;
+import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -8,6 +9,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.util.ArrayList;
 import java.util.Collection;
 
+@Data
 public class PrincipalDetails implements UserDetails {
 
     private User user;

@@ -1,8 +1,10 @@
 package com.allchat.allchat.filter;
 
-import com.allchat.allchat.domain.user.User;
+import com.allchat.allchat.config.auth.PrincipalDetails;
 import com.allchat.allchat.dto.CMRespDTO;
+import com.allchat.allchat.dto.login.LoginResDTO;
 import com.allchat.allchat.dto.user.UserDTO;
+import com.allchat.allchat.jwt.JwtUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
@@ -12,14 +14,13 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
-import javax.servlet.ServletInputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.io.PrintWriter;
 
 //login 시 작동 - 스프링 시큐리티에서 제공
 //formLong.disable 으로 설정시 작동 x -> 때문에 추가 securityConfig 에  필터 등록
@@ -29,6 +30,7 @@ import java.io.PrintWriter;
 public class LoginFilter extends UsernamePasswordAuthenticationFilter {
 
     private final AuthenticationManager authenticationManager;
+    private final JwtUtil jwtUtil;
 
     private ObjectMapper objectMapper = new ObjectMapper();
 
@@ -42,7 +44,8 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
 
         System.out.println("로그인 시도");
 
-        UserDTO userDTO = objectMapper.readValue(request.getInputStream(), UserDTO.class);
+        UserDTO userDTO = objectMapper.readValue(request.getInputStream(),
+                UserDTO.class);
 
         log.info("UserDTO: " + userDTO);
 
@@ -55,6 +58,7 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
     /**
      *  로그인 성공시
      */
+    @Transactional
     @Override
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response,
                                             FilterChain chain, Authentication authResult)
@@ -62,7 +66,21 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
 
         System.out.println("성공!!!!!!!");
 
+        PrincipalDetails principalDetails = (PrincipalDetails) authResult.getPrincipal();
         //TODO jwt 발급
+        String jwtToken = jwtUtil.generateToken(principalDetails.getUser().getUserId());
+
+        LoginResDTO loginResDTO = LoginResDTO.builder()
+                .userId(principalDetails.getUser().getUserId())
+                .jwtToken(jwtToken)
+                .build();
+
+        //response json 값
+        response.setHeader("content-type", "application/json");
+        response.setCharacterEncoding("utf-8");
+
+        String result = objectMapper.writeValueAsString(loginResDTO);
+        response.getWriter().write(result);
     }
 
     /**
