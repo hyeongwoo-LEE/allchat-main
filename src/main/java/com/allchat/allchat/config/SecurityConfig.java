@@ -31,6 +31,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Bean
+    @Override
+    public AuthenticationManager authenticationManagerBean() throws Exception {
+        return super.authenticationManagerBean();
+    }
+
+    @Bean
     public JwtUtil jwtUtil(){
         return new JwtUtil();
     }
@@ -54,6 +60,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
         http.authorizeRequests()
                 .antMatchers("/auth/**").permitAll()
+                .antMatchers("/kauth/**").permitAll()
                 .anyRequest().authenticated(); // /auth/** 이외 모두 인증 필수.
 
 

@@ -43,6 +43,7 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
 
         String authHeader = request.getHeader("Authorization");
 
+        System.out.println("url:" + request.getRequestURI());
         System.out.println("Authorization: " + authHeader);
 
         if (StringUtils.hasText(authHeader) && authHeader.startsWith("Bearer ")) {

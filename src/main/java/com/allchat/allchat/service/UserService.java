@@ -45,7 +45,22 @@ public class UserService {
 
         userSignupDTO.setPassword(encPassword);
 
-        User user = userRepository.save(userSignupDTO.toEntity());
+        User user = userRepository.save(userSignupDTO.toEntity(false));
+
+        return user;
+    }
+
+    /**
+     * 카카오 회원가입
+     */
+    public User kakaoJoin(UserSignupDTO userSignupDTO){
+
+        String rawPassword = userSignupDTO.getPassword();
+        String encPassword = passwordEncoder.encode(rawPassword);
+
+        userSignupDTO.setPassword(encPassword);
+
+        User user = userRepository.save(userSignupDTO.toEntity(true));
 
         return user;
     }
