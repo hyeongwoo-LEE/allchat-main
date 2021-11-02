@@ -45,4 +45,4 @@ jobs:
             environment_name: Eballchatmain-env
             version_label: "java-${{steps.current-time.outputs.formattedTime}}"
             region: ap-northeast-2
-            deployment_package: deploy/deploy.zip
+            deployment_package: deploy.zip
