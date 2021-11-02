@@ -1,1 +1,1 @@
-web: java -jar allchat.jar
+web: java -jar build/libs/allchat-0.0.1-SNAPSHOT.jar
