@@ -32,7 +32,7 @@ jobs:
           utcOffset: "+09:00"
 
       - name : Generate deployment package # (1)
-        run: |
+        run: 
           mkdir -p deploy
           cp build/libs/*.jar deploy/application.jar
           cd deploy && zip -r deploy.zip .
