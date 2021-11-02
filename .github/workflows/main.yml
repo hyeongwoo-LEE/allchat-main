@@ -21,8 +21,10 @@ jobs:
           cache: gradle
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
+        shell: bash
       - name: Build with Gradle
         run: ./gradlew build
+        shell: bash
 
       - name: Get current time
         uses: 1466587594/get-current-time@v2
@@ -33,7 +35,7 @@ jobs:
 
       - name : Generate deployment package # (1)
         run: |
-          mkdir deploy
+          mkdir -p deploy
           cp build/libs/*.jar deploy/application.jar
           cd deploy && zip -r deploy.zip .
 
