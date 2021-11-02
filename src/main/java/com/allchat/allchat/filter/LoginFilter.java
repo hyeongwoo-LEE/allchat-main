@@ -81,6 +81,7 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
 
         String result = objectMapper.writeValueAsString(loginResDTO);
         response.getWriter().write(result);
+
     }
 
     /**
