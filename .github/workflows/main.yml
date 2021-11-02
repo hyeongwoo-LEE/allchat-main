@@ -27,26 +27,26 @@ jobs:
           run: ./gradlew clean build
           shell: bash
 
-      - name: Get current time
-        uses: 1466587594/get-current-time@v2
-        id: current-time
-        with:
-          format: YYYY-MM-DDTHH-mm-ss
-          utcOffset: "+09:00"
+        - name: Get current time
+          uses: 1466587594/get-current-time@v2
+          id: current-time
+          with:
+            format: YYYY-MM-DDTHH-mm-ss
+            utcOffset: "+09:00"
 
-      - name : Generate deployment package # (1)
-        run: |
-          mkdir -p deploy
-          cp build/libs/*.jar deploy/application.jar
-          cd deploy && zip -r deploy.zip .
+        - name : Generate deployment package # (1)
+          run: |
+            mkdir -p deploy
+            cp build/libs/*.jar deploy/application.jar
+            cd deploy && zip -r deploy.zip .
 
-      - name : Deploy to EB
-        uses: einaregilsson/beanstalk-deploy@v14
-        with:
-          aws_access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          application_name: eb-allchat-main
-          environment_name: Eballchatmain-env
-          version_label: "java-${{steps.current-time.outputs.formattedTime}}"
-          region: ap-northeast-2
-          deployment_package: deploy/deploy.zip
+        - name : Deploy to EB
+          uses: einaregilsson/beanstalk-deploy@v14
+          with:
+            aws_access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}
+            aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+            application_name: eb-allchat-main
+            environment_name: Eballchatmain-env
+            version_label: "java-${{steps.current-time.outputs.formattedTime}}"
+            region: ap-northeast-2
+            deployment_package: deploy/deploy.zip
