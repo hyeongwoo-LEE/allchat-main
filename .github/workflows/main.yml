@@ -34,7 +34,7 @@ jobs:
       - name : Generate deployment package # (1)
         run:
           mkdir -p deploy
-          cp build/libs/*.jar deploy/application.jar
+          cp -r build/libs/*.jar deploy/application.jar
           cd deploy && zip -r deploy.zip .
 
       - name : Deploy to EB
