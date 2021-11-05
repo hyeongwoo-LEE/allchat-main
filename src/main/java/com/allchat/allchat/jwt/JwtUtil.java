@@ -31,23 +31,23 @@ public class JwtUtil implements InitializingBean {
     }
 
     //토큰 생성
-    public String generateToken(Long userId) throws UnsupportedEncodingException {
+    public String generateToken(String username) throws UnsupportedEncodingException {
 
         return "Bearer " + Jwts.builder()
                 .setIssuedAt(new Date())
                 .setExpiration(Date.from(ZonedDateTime.now().plusMinutes(expire).toInstant()))
-                .claim("userId", userId)
+                .claim("username", username)
                 .signWith(key, SignatureAlgorithm.HS256)
                 .compact();
     }
 
-    public Long validateAndExtract(String tokenStr){
+    public String validateAndExtract(String tokenStr){
 
             try{
 
                 Claims claims = Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(tokenStr).getBody();
-                Long userId = claims.get("userId", Long.class);
-                return userId;
+                String username = claims.get("username", String.class);
+                return username;
 
             }catch (io.jsonwebtoken.security.SecurityException | MalformedJwtException e) {
                 log.info("잘못된 JWT 서명입니다.");

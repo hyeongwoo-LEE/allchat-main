@@ -48,13 +48,13 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
 
         if (StringUtils.hasText(authHeader) && authHeader.startsWith("Bearer ")) {
             //jwt 토큰 검증
-            Long userId = jwtUtil.validateAndExtract(authHeader.substring(7));
+            String username = jwtUtil.validateAndExtract(authHeader.substring(7));
 
-            log.info("userId: " + userId);
+            log.info("username: " + username);
 
-            if(userId != null){
+            if(username != null){
 
-                User user = userRepository.findById(userId).orElseThrow(() -> {
+                User user = userRepository.findByUsername(username).orElseThrow(() -> {
                     throw new IllegalStateException("존재하지 않은 회원입니다.");
                 });
 

@@ -116,7 +116,7 @@ public class UserController {
 
         PrincipalDetails principalDetails = (PrincipalDetails) authenticate.getPrincipal();
 
-        String jwtToken = jwtUtil.generateToken(principalDetails.getUser().getUserId());
+        String jwtToken = jwtUtil.generateToken(principalDetails.getUser().getUsername());
 
         LoginResDTO loginResDTO = LoginResDTO.builder()
                 .userId(principalDetails.getUser().getUserId())
