@@ -29,4 +29,10 @@ public class ChatRoomJoin {
     @Column(nullable = false)
     private RoleType role;
 
+    //-----연관관계 메서드-------
+    public void setChatRoom(ChatRoom chatRoom){
+        this.chatRoom = chatRoom;
+        chatRoom.getParticipantList().add(this);
+    }
+
 }

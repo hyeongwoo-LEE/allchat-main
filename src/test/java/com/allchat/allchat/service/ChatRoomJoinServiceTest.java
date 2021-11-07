@@ -29,15 +29,19 @@ class ChatRoomJoinServiceTest {
     @Test
     void 방참여() throws Exception{
         //given
+        //방장 생성
+        User master = createUser("master");
+        //회원 생성
         User userA = createUser("userA");
 
-        ChatRoom chatRoomA = createChatRoom("제목입니다.");
+        ChatRoom chatRoomA = createChatRoom(master,"제목입니다.");
 
         //when
         ChatRoomJoin chatRoomJoin = chatRoomJoinService.join(chatRoomA.getChatRoomId(), userA.getUserId());
 
         //then
         Assertions.assertThat(chatRoomJoin.getJoinId()).isNotNull();
+        Assertions.assertThat(chatRoomJoin.getChatRoom()).isEqualTo(chatRoomA);
         Assertions.assertThat(chatRoomJoin.getRole()).isEqualTo(RoleType.GUEST);
         Assertions.assertThat(chatRoomJoin.getUser().getUserId()).isEqualTo(userA.getUserId());
         Assertions.assertThat(chatRoomJoin.getChatRoom().getChatRoomId()).isEqualTo(chatRoomA.getChatRoomId());
@@ -46,11 +50,13 @@ class ChatRoomJoinServiceTest {
     @Test
     void 방_나가기() throws Exception{
         //given
+        //방장 생성
+        User master = createUser("master");
         //회원 생성
         User userA = createUser("userA");
 
         //방 생성
-        ChatRoom chatRoomA = createChatRoom("제목입니다.");
+        ChatRoom chatRoomA = createChatRoom(master,"제목입니다.");
 
         //방 참여 생성
         ChatRoomJoin chatRoomJoin = createChatRoomJoin(chatRoomA, userA);
@@ -79,9 +85,10 @@ class ChatRoomJoinServiceTest {
         return chatRoomJoin;
     }
 
-    private ChatRoom createChatRoom(String title) {
+    private ChatRoom createChatRoom(User master, String title) {
 
         ChatRoom chatRoom = ChatRoom.builder()
+                .user(master)
                 .title(title)
                 .build();
 
