@@ -58,20 +58,37 @@ public class ChatRoomService {
 
         List<ChatRoomResDTO> chatRoomResDTOList = allChatRoomList.stream().map(chatRoom -> {
 
-            System.out.println("-------------조회 시작--------------");
             //참여 상태 체크
             for (ChatRoomJoin chatRoomJoin : chatRoom.getParticipantList()) {
                 if (chatRoomJoin.getUser().getUserId().equals(principalId)) {
-                    System.out.println("-------------조회 종료--------------");
+
                     return chatRoom.toDTO(chatRoom.getParticipantList().size(), true);
                 }
             }
-            System.out.println("-------------조회 종료--------------");
-            ChatRoomResDTO result = chatRoom.toDTO(chatRoom.getParticipantList().size(), false);
-            return result;
+
+            return chatRoom.toDTO(chatRoom.getParticipantList().size(), false);
+
 
 
         }).collect(Collectors.toList());
+
+        return chatRoomResDTOList;
+    }
+
+    /**
+     * 참여중인 채팅방 목록
+     */
+    public List<ChatRoomResDTO> getJoinChatRoomList(Long principalId){
+
+        //내가 참여한 채팅방 리스트
+        List<ChatRoom> joinChatRoomList = chatRoomRepository.getJoinChatRoomList(principalId);
+
+        System.out.println("---------시작-----------------");
+        List<ChatRoomResDTO> chatRoomResDTOList =
+                joinChatRoomList.stream().map(chatRoom ->
+                        chatRoom.toDTO(chatRoom.getParticipantList().size(), true))
+                        .collect(Collectors.toList());
+        System.out.println("---------종료-----------------");
 
         return chatRoomResDTOList;
     }

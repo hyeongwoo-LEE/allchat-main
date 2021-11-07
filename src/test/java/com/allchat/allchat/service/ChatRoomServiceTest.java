@@ -126,6 +126,82 @@ class ChatRoomServiceTest {
         }
     }*/
 
+    @Test
+    void 참여중_채티방리스트() throws Exception{
+        //given
+        //채팅방 3개 생성
+        IntStream.rangeClosed(1,3).forEach(i -> {
+            User user = createUser("user" + i);
+            createChatRoom(user, "채팅방" + i);
+        });
+
+        List<ChatRoom> chatRoomList = chatRoomRepository.findAll();
+        ChatRoom chatRoom1 = chatRoomList.get(0);
+        ChatRoom chatRoom2 = chatRoomList.get(1);
+        ChatRoom chatRoom3 = chatRoomList.get(2);
+
+        //chatRoom1 방장이 chatRoom2에 참여
+        ChatRoomJoin chatRoomJoinA = ChatRoomJoin.builder()
+                .user(chatRoom1.getUser())
+                .role(RoleType.GUEST)
+                .build();
+
+        chatRoomJoinA.setChatRoom(chatRoom2);
+
+        chatRoomJoinRepository.save(chatRoomJoinA);
+
+        //현재 사용 유저 생성
+        User currentUser = createUser("CurrentUser");
+
+        //chatRoom1 에 참여
+        ChatRoomJoin chatRoomJoinB = ChatRoomJoin.builder()
+                .user(currentUser)
+                .role(RoleType.GUEST)
+                .build();
+
+        chatRoomJoinB.setChatRoom(chatRoom1);
+        chatRoomJoinRepository.save(chatRoomJoinB);
+
+        //chatRoom2 에 참여
+        ChatRoomJoin chatRoomJoinC = ChatRoomJoin.builder()
+                .user(currentUser)
+                .role(RoleType.GUEST)
+                .build();
+
+        chatRoomJoinC.setChatRoom(chatRoom2);
+        chatRoomJoinRepository.save(chatRoomJoinC);
+
+        /**
+         * chatRoom1 - 참여인원 2 (현재사용유저 포함 - participantState - true)
+         * chatRoom2 - 참여인원 3 (현재사용유저 포함 - participantState - true)
+         * chatRoom3 - 참여인원 1
+         */
+
+        //when
+        List<ChatRoomResDTO> result = chatRoomService.getJoinChatRoomList(currentUser.getUserId());
+
+        //then
+        for (ChatRoomResDTO chatRoomResDTO : result){
+            System.out.println(chatRoomResDTO);
+        }
+
+        Assertions.assertThat(result.size()).isEqualTo(2);
+    }
+
+    /*
+    @Test
+    void test2() throws Exception{
+        //given
+
+        //when
+        List<ChatRoomResDTO> result = chatRoomService.getJoinChatRoomList(8L);
+
+        //then
+        for(ChatRoomResDTO chatRoomResDTO : result){
+            System.out.println(chatRoomResDTO);
+        }
+    }*/
+
     private ChatRoom createChatRoom(User master, String title) {
 
         ChatRoomDTO chatRoomDTO = ChatRoomDTO.builder()
