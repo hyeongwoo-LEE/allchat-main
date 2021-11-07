@@ -2,6 +2,7 @@ package com.allchat.allchat.domain.chatRoomJoin;
 
 import com.allchat.allchat.domain.chatRoom.ChatRoom;
 import com.allchat.allchat.domain.user.User;
+import com.allchat.allchat.dto.chatRoomJoin.ChatRoomJoinResDTO;
 import lombok.*;
 
 import javax.persistence.*;

@@ -6,9 +6,13 @@ import com.allchat.allchat.domain.chatRoomJoin.ChatRoomJoin;
 import com.allchat.allchat.domain.chatRoomJoin.ChatRoomJoinRepository;
 import com.allchat.allchat.domain.chatRoomJoin.RoleType;
 import com.allchat.allchat.domain.user.User;
+import com.allchat.allchat.dto.chatRoomJoin.ChatRoomJoinResDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Transactional
 @RequiredArgsConstructor
@@ -46,5 +50,29 @@ public class ChatRoomJoinService {
     @Transactional
     public void remove(Long chatRoomId, Long principalId){
         chatRoomJoinRepository.delete(chatRoomId, principalId);
+    }
+
+    @Transactional(readOnly = true)
+    public List<ChatRoomJoinResDTO> getParticipantList(Long chatRoomId){
+
+        List<Object[]> result = chatRoomJoinRepository.getParticipantList(chatRoomId);
+
+        List<ChatRoomJoinResDTO> chatRoomJoinResDTOList =
+                result.stream().map(obj ->
+                        entityToDTO((ChatRoomJoin) obj[0], (User) obj[1])).collect(Collectors.toList());
+
+        return chatRoomJoinResDTOList;
+    }
+
+    private ChatRoomJoinResDTO entityToDTO(ChatRoomJoin chatRoomJoin, User user) {
+
+        ChatRoomJoinResDTO chatRoomJoinResDTO = ChatRoomJoinResDTO.builder()
+                .joinId(chatRoomJoin.getJoinId())
+                .userId(user.getUserId())
+                .username(user.getUsername())
+                .build();
+
+        return chatRoomJoinResDTO;
+
     }
 }

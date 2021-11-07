@@ -18,6 +18,7 @@ import org.springframework.test.annotation.Commit;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.stream.IntStream;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -56,6 +57,43 @@ class ChatRoomServiceTest {
         Assertions.assertThat(chatRoomJoin.getChatRoom().getChatRoomId()).isEqualTo(chatRoom.getChatRoomId());
         Assertions.assertThat(chatRoomJoin.getUser().getUserId()).isEqualTo(userA.getUserId());
         Assertions.assertThat(chatRoomJoin.getRole()).isEqualTo(RoleType.MASTER);
+    }
+
+    @Test
+    void 방삭제() throws Exception{
+        //given
+        //방장생성
+        User master = createUser("master");
+
+        //채팅방 생성 - 참여자 리스트에 방장 추가
+        ChatRoom chatRoom = createChatRoom(master, "아무나 들어와");
+
+        //참여자 생성
+        User user = createUser("user");
+
+        //참여
+        ChatRoomJoin chatRoomJoin = ChatRoomJoin.builder()
+                .user(user)
+                .role(RoleType.GUEST)
+                .build();
+
+        chatRoomJoin.setChatRoom(chatRoom);
+        chatRoomJoinRepository.save(chatRoomJoin);
+
+        //when
+        chatRoomService.remove(chatRoom.getChatRoomId());
+
+        //then
+        //삭제된 채팅방의 참여리스트 검색
+        NoSuchElementException e1 = assertThrows(NoSuchElementException.class,
+                () -> chatRoomJoinRepository.findById(chatRoomJoin.getJoinId()).get());
+
+        //삭제된 채팅방 검색
+        NoSuchElementException e2 = assertThrows(NoSuchElementException.class,
+                () -> chatRoomRepository.findById(chatRoom.getChatRoomId()).get());
+
+        Assertions.assertThat(e1.getMessage()).isEqualTo("No value present");
+        Assertions.assertThat(e2.getMessage()).isEqualTo("No value present");
     }
 
     @Test

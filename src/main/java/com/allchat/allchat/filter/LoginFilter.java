@@ -64,8 +64,6 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
                                             FilterChain chain, Authentication authResult)
             throws IOException, ServletException {
 
-        System.out.println("성공!!!!!!!");
-
         PrincipalDetails principalDetails = (PrincipalDetails) authResult.getPrincipal();
 
         String jwtToken = jwtUtil.generateToken(principalDetails.getUser().getUsername());

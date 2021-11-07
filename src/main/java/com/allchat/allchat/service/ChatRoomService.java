@@ -49,9 +49,18 @@ public class ChatRoomService {
     }
 
     /**
-     * 전체 채팅방 목록
+     * 채팅방 삭제
      */
     @Transactional
+    public void remove(Long chatRoomId){
+
+        chatRoomRepository.deleteById(chatRoomId);
+    }
+
+    /**
+     * 전체 채팅방 목록
+     */
+    @Transactional(readOnly = true)
     public List<ChatRoomResDTO> getAllChatRoomList(Long principalId){
 
         List<ChatRoom> allChatRoomList = chatRoomRepository.findAll();
@@ -78,17 +87,16 @@ public class ChatRoomService {
     /**
      * 참여중인 채팅방 목록
      */
+    @Transactional(readOnly = true)
     public List<ChatRoomResDTO> getJoinChatRoomList(Long principalId){
 
         //내가 참여한 채팅방 리스트
         List<ChatRoom> joinChatRoomList = chatRoomRepository.getJoinChatRoomList(principalId);
 
-        System.out.println("---------시작-----------------");
         List<ChatRoomResDTO> chatRoomResDTOList =
                 joinChatRoomList.stream().map(chatRoom ->
                         chatRoom.toDTO(chatRoom.getParticipantList().size(), true))
                         .collect(Collectors.toList());
-        System.out.println("---------종료-----------------");
 
         return chatRoomResDTOList;
     }

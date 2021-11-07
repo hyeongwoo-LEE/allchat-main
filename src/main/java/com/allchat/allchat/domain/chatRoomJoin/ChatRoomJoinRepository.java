@@ -16,4 +16,8 @@ public interface ChatRoomJoinRepository extends JpaRepository<ChatRoomJoin, Long
             "where j.chatRoom.chatRoomId=:chatRoomId AND j.user.userId=:userId")
     void delete(Long chatRoomId, Long userId);
 
+    @Query("select crj, u from ChatRoomJoin crj " +
+            "left join User u on u.userId = crj.user.userId " +
+            "where crj.chatRoom.chatRoomId = :chatRoomId")
+    List<Object[]> getParticipantList(Long chatRoomId);
 }

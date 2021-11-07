@@ -7,13 +7,17 @@ import com.allchat.allchat.domain.chatRoomJoin.ChatRoomJoinRepository;
 import com.allchat.allchat.domain.chatRoomJoin.RoleType;
 import com.allchat.allchat.domain.user.User;
 import com.allchat.allchat.domain.user.UserRepository;
+import com.allchat.allchat.dto.chatRoom.ChatRoomDTO;
+import com.allchat.allchat.dto.chatRoomJoin.ChatRoomJoinResDTO;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.stream.IntStream;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -25,6 +29,7 @@ class ChatRoomJoinServiceTest {
     @Autowired UserRepository userRepository;
     @Autowired ChatRoomRepository chatRoomRepository;
     @Autowired ChatRoomJoinRepository chatRoomJoinRepository;
+    @Autowired ChatRoomService chatRoomService;
 
     @Test
     void 방참여() throws Exception{
@@ -72,6 +77,40 @@ class ChatRoomJoinServiceTest {
 
     }
 
+    @Test
+    void 채팅방_참여자_리스트() throws Exception{
+        //given
+        //방장생성
+        User master = createUser("master");
+
+        //채팅방 생성
+        ChatRoom chatRoom = createChatRoom(master, "아무나 들어와");
+
+        //채팅 참가 3명
+        IntStream.rangeClosed(1,3).forEach(i -> {
+
+            User user = createUser("user" + i);
+
+            ChatRoomJoin chatRoomJoin = ChatRoomJoin.builder()
+                    .user(user)
+                    .role(RoleType.GUEST)
+                    .build();
+
+            chatRoomJoin.setChatRoom(chatRoom);
+            chatRoomJoinRepository.save(chatRoomJoin);
+        });
+
+        //when
+        List<ChatRoomJoinResDTO> result = chatRoomJoinService.getParticipantList(chatRoom.getChatRoomId());
+
+        //then
+        for (ChatRoomJoinResDTO chatRoomJoinResDTO : result){
+            System.out.println(chatRoomJoinResDTO);
+        }
+
+        Assertions.assertThat(result.size()).isEqualTo(4);
+    }
+
     private ChatRoomJoin createChatRoomJoin(ChatRoom chatRoom, User user) {
 
         ChatRoomJoin chatRoomJoin = ChatRoomJoin.builder()
@@ -87,14 +126,12 @@ class ChatRoomJoinServiceTest {
 
     private ChatRoom createChatRoom(User master, String title) {
 
-        ChatRoom chatRoom = ChatRoom.builder()
-                .user(master)
+        ChatRoomDTO chatRoomDTO = ChatRoomDTO.builder()
+                .masterId(master.getUserId())
                 .title(title)
                 .build();
 
-        chatRoomRepository.save(chatRoom);
-
-        return chatRoom;
+        return chatRoomService.create(chatRoomDTO, master.getUserId());
     }
 
     private User createUser(String username) {
