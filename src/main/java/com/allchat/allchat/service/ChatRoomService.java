@@ -6,6 +6,7 @@ import com.allchat.allchat.domain.chatRoomJoin.ChatRoomJoin;
 import com.allchat.allchat.domain.chatRoomJoin.ChatRoomJoinRepository;
 import com.allchat.allchat.domain.chatRoomJoin.RoleType;
 import com.allchat.allchat.domain.user.User;
+import com.allchat.allchat.dto.chatRoom.ChatRoomDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,10 +23,11 @@ public class ChatRoomService {
      * 채팅방 생성
      */
     @Transactional
-    public ChatRoom create(String title, Long principalId){
+    public ChatRoom create(ChatRoomDTO chatRoomDTO, Long principalId){
 
         ChatRoom chatRoom = ChatRoom.builder()
-                .title(title)
+                .user(User.builder().userId(principalId).build())
+                .title(chatRoomDTO.getTitle())
                 .build();
 
         chatRoomRepository.save(chatRoom);

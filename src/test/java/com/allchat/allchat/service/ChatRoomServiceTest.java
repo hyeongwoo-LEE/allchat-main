@@ -30,15 +30,17 @@ class ChatRoomServiceTest {
         User userA = createUser("userA");
 
         ChatRoomDTO chatRoomDTO = ChatRoomDTO.builder()
+                .masterId(userA.getUserId())
                 .title("다드루와")
                 .build();
 
         //when
-        ChatRoom chatRoom = chatRoomService.create(chatRoomDTO.getTitle(), userA.getUserId());
+        ChatRoom chatRoom = chatRoomService.create(chatRoomDTO, userA.getUserId());
 
         //then
         //ChatRoom 검증
         Assertions.assertThat(chatRoom.getChatRoomId()).isNotNull();
+        Assertions.assertThat(chatRoom.getUser().getUserId()).isEqualTo(chatRoomDTO.getMasterId());
         Assertions.assertThat(chatRoom.getTitle()).isEqualTo(chatRoomDTO.getTitle());
 
         //chatRoomJoin 검증

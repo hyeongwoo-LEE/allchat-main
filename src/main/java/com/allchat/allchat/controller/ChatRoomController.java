@@ -33,7 +33,7 @@ public class ChatRoomController {
     public ResponseEntity<?> createChatRoom(@RequestBody ChatRoomDTO chatRoomDTO,
                                             @AuthenticationPrincipal PrincipalDetails principalDetails){
 
-        chatRoomService.create(chatRoomDTO.getTitle(), principalDetails.getUser().getUserId());
+        chatRoomService.create(chatRoomDTO, principalDetails.getUser().getUserId());
 
         return new ResponseEntity<>(new CMRespDTO<>(1, "채팅방 생성 성공", null), HttpStatus.CREATED);
     }

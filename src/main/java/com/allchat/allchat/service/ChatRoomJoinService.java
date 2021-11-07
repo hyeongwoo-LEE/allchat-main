@@ -38,9 +38,6 @@ public class ChatRoomJoinService {
      */
     @Transactional
     public void remove(Long chatRoomId, Long principalId){
-        
         chatRoomJoinRepository.delete(chatRoomId, principalId);
-
     }
-
 }
