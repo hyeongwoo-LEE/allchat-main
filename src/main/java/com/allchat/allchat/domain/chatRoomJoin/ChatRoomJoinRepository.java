@@ -1,6 +1,7 @@
 package com.allchat.allchat.domain.chatRoomJoin;
 
 import com.allchat.allchat.domain.chatRoom.ChatRoom;
+import com.allchat.allchat.domain.user.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -20,4 +21,6 @@ public interface ChatRoomJoinRepository extends JpaRepository<ChatRoomJoin, Long
             "left join User u on u.userId = crj.user.userId " +
             "where crj.chatRoom.chatRoomId = :chatRoomId")
     List<Object[]> getParticipantList(Long chatRoomId);
+
+    boolean existsByChatRoomAndUser(ChatRoom chatRoom, User user);
 }

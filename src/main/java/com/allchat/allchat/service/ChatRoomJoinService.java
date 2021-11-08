@@ -6,6 +6,7 @@ import com.allchat.allchat.domain.chatRoomJoin.ChatRoomJoin;
 import com.allchat.allchat.domain.chatRoomJoin.ChatRoomJoinRepository;
 import com.allchat.allchat.domain.chatRoomJoin.RoleType;
 import com.allchat.allchat.domain.user.User;
+import com.allchat.allchat.domain.user.UserRepository;
 import com.allchat.allchat.dto.chatRoomJoin.ChatRoomJoinResDTO;
 import com.allchat.allchat.handler.exception.CustomException;
 import lombok.RequiredArgsConstructor;
@@ -22,6 +23,7 @@ public class ChatRoomJoinService {
 
     private final ChatRoomJoinRepository chatRoomJoinRepository;
     private final ChatRoomRepository chatRoomRepository;
+    private final UserRepository userRepository;
 
     /**
      * 채팅방 참여
@@ -31,6 +33,13 @@ public class ChatRoomJoinService {
 
         ChatRoom chatRoom = chatRoomRepository.findById(chatRoomId).orElseThrow(() ->
                 new CustomException("채팅방이 존재하지 않습니다.."));
+
+        User user = userRepository.findById(principalId).orElseThrow(() ->
+                new CustomException("존재하는 회원이 아닙니다."));
+
+        if(chatRoomJoinRepository.existsByChatRoomAndUser(chatRoom, user)){
+            throw new CustomException("이미 참여하고 있는 채팅방입니다.");
+        }
 
         ChatRoomJoin chatRoomJoin = ChatRoomJoin.builder()
                 .chatRoom(ChatRoom.builder().chatRoomId(chatRoomId).build())
