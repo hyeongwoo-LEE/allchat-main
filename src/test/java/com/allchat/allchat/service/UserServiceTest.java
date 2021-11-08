@@ -8,7 +8,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.test.annotation.Commit;
 import org.springframework.transaction.annotation.Transactional;
 
 @Transactional
@@ -28,7 +27,7 @@ class UserServiceTest {
         Boolean result = userService.isDuplicateNickname(userA.getUsername());
 
         //then
-        Assertions.assertThat(result).isTrue();
+        Assertions.assertThat(result).isFalse();
     }
 
     @Test
@@ -39,7 +38,7 @@ class UserServiceTest {
         Boolean result = userService.isDuplicateNickname("사용가능 아이디");
 
         //then
-        Assertions.assertThat(result).isFalse();
+        Assertions.assertThat(result).isTrue();
     }
 
     @Test
