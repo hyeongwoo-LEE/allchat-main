@@ -7,6 +7,7 @@ import com.allchat.allchat.domain.chatRoomJoin.ChatRoomJoinRepository;
 import com.allchat.allchat.domain.chatRoomJoin.RoleType;
 import com.allchat.allchat.domain.user.User;
 import com.allchat.allchat.dto.chatRoomJoin.ChatRoomJoinResDTO;
+import com.allchat.allchat.handler.exception.CustomException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -29,7 +30,7 @@ public class ChatRoomJoinService {
     public ChatRoomJoin join(Long chatRoomId, Long principalId){
 
         ChatRoom chatRoom = chatRoomRepository.findById(chatRoomId).orElseThrow(() ->
-                new IllegalStateException("채팅방이 존재하지 않습니다.."));
+                new CustomException("채팅방이 존재하지 않습니다.."));
 
         ChatRoomJoin chatRoomJoin = ChatRoomJoin.builder()
                 .chatRoom(ChatRoom.builder().chatRoomId(chatRoomId).build())

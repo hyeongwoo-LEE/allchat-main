@@ -3,6 +3,7 @@ package com.allchat.allchat.service;
 import com.allchat.allchat.domain.user.User;
 import com.allchat.allchat.domain.user.UserRepository;
 import com.allchat.allchat.dto.user.UserSignupDTO;
+import com.allchat.allchat.handler.exception.CustomException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -37,7 +38,7 @@ public class UserService {
     public User join(UserSignupDTO userSignupDTO){
 
         if(userRepository.findByUsername(userSignupDTO.getUsername()).isPresent()){
-            throw new IllegalStateException("이미 존재하는 아이디입니다.");
+            throw new CustomException("이미 존재하는 아이디입니다.");
         }
 
         String rawPassword = userSignupDTO.getPassword();

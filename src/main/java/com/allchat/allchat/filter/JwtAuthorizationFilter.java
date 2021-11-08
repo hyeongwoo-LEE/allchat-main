@@ -3,6 +3,7 @@ package com.allchat.allchat.filter;
 import com.allchat.allchat.config.auth.PrincipalDetails;
 import com.allchat.allchat.domain.user.User;
 import com.allchat.allchat.domain.user.UserRepository;
+import com.allchat.allchat.handler.exception.CustomException;
 import com.allchat.allchat.jwt.JwtUtil;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -54,7 +55,7 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
             if(username != null){
 
                 User user = userRepository.findByUsername(username).orElseThrow(() -> {
-                    throw new IllegalStateException("존재하지 않은 회원입니다.");
+                    throw new CustomException("존재하지 않은 회원입니다.");
                 });
 
                 PrincipalDetails principalDetails = new PrincipalDetails(user);
