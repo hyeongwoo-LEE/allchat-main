@@ -5,13 +5,16 @@ import com.allchat.allchat.config.auth.PrincipalDetails;
 import com.allchat.allchat.dto.CMRespDTO;
 import com.allchat.allchat.dto.chatRoomJoin.ChatRoomJoinDTO;
 import com.allchat.allchat.dto.chatRoomJoin.ChatRoomJoinResDTO;
+import com.allchat.allchat.handler.exception.CustomException;
 import com.allchat.allchat.service.ChatRoomJoinService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -37,11 +40,11 @@ public class ChatRoomJoinController {
      * 채팅방 참여
      */
     @PostMapping("/joins")
-    public ResponseEntity<?> join(@RequestBody ChatRoomJoinDTO chatRoomJoinDTO,
+    public ResponseEntity<?> join(@Valid @RequestBody ChatRoomJoinDTO chatRoomJoinDTO, BindingResult bindingResult,
                                   @AuthenticationPrincipal PrincipalDetails principalDetails){
 
         if(!principalDetails.getUser().getUserId().equals(chatRoomJoinDTO.getUserId())){
-            throw new IllegalStateException("참여 권한이 없습니다.");
+            throw new CustomException("참여 권한이 없습니다.");
         }
 
         chatRoomJoinService.join(chatRoomJoinDTO.getChatRoomId(), chatRoomJoinDTO.getUserId());
@@ -53,11 +56,11 @@ public class ChatRoomJoinController {
      * 채팅방 나가기
      */
     @DeleteMapping("/joins")
-    public ResponseEntity<?> getOut(@RequestBody ChatRoomJoinDTO chatRoomJoinDTO,
+    public ResponseEntity<?> getOut(@Valid @RequestBody ChatRoomJoinDTO chatRoomJoinDTO, BindingResult bindingResult,
                                     @AuthenticationPrincipal PrincipalDetails principalDetails){
 
         if(!principalDetails.getUser().getUserId().equals(chatRoomJoinDTO.getUserId())){
-            throw new IllegalStateException("채팅방 나가기 권한이 없습니다.");
+            throw new CustomException("채팅방 나가기 권한이 없습니다.");
         }
 
         chatRoomJoinService.remove(chatRoomJoinDTO.getChatRoomId(), chatRoomJoinDTO.getUserId());

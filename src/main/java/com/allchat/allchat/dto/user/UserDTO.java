@@ -5,6 +5,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.NotBlank;
+
 @Data
 @Builder
 @AllArgsConstructor
@@ -13,6 +15,7 @@ public class UserDTO {
 
     private Long userId;
 
+    @NotBlank
     private String username;
 
     private String password;

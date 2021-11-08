@@ -4,13 +4,16 @@ import com.allchat.allchat.config.auth.PrincipalDetails;
 import com.allchat.allchat.dto.CMRespDTO;
 import com.allchat.allchat.dto.chatRoom.ChatRoomDTO;
 import com.allchat.allchat.dto.chatRoom.ChatRoomResDTO;
+import com.allchat.allchat.handler.exception.CustomException;
 import com.allchat.allchat.service.ChatRoomService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RequestMapping("/chatrooms")
@@ -47,11 +50,11 @@ public class ChatRoomController {
      * 채팅방 생성
      */
     @PostMapping
-    public ResponseEntity<?> createChatRoom(@RequestBody ChatRoomDTO chatRoomDTO,
+    public ResponseEntity<?> createChatRoom(@Valid @RequestBody ChatRoomDTO chatRoomDTO, BindingResult bindingResult,
                                             @AuthenticationPrincipal PrincipalDetails principalDetails){
 
         if (!principalDetails.getUser().getUserId().equals(chatRoomDTO.getMasterId())){
-            throw new IllegalStateException("생성 권한이 없습니다.");
+            throw new CustomException("생성 권한이 없습니다.");
         }
 
         chatRoomService.create(chatRoomDTO, principalDetails.getUser().getUserId());

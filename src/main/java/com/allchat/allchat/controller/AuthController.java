@@ -7,10 +7,13 @@ import com.allchat.allchat.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import javax.validation.Valid;
 
 @RequiredArgsConstructor
 @RestController
@@ -22,7 +25,7 @@ public class AuthController {
      * 아이디 중복확인
      */
     @PostMapping("/auth/duplicate")
-    public ResponseEntity<?> checkDuplicate(@RequestBody UserDTO userDTO){
+    public ResponseEntity<?> checkDuplicate(@Valid @RequestBody UserDTO userDTO, BindingResult bindingResult){
 
         Boolean result = userService.isDuplicateNickname(userDTO.getUsername());
 
@@ -34,7 +37,7 @@ public class AuthController {
      * 회원가입
      */
     @PostMapping("/auth/signup")
-    public ResponseEntity<?> signup(@RequestBody UserSignupDTO userSignupDTO){
+    public ResponseEntity<?> signup(@Valid @RequestBody UserSignupDTO userSignupDTO, BindingResult bindingResult){
 
         userService.join(userSignupDTO);
 
