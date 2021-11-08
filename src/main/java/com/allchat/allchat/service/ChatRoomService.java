@@ -9,6 +9,7 @@ import com.allchat.allchat.domain.user.User;
 import com.allchat.allchat.dto.chatRoom.ChatRoomDTO;
 import com.allchat.allchat.dto.chatRoom.ChatRoomResDTO;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -63,7 +64,7 @@ public class ChatRoomService {
     @Transactional(readOnly = true)
     public List<ChatRoomResDTO> getAllChatRoomList(Long principalId){
 
-        List<ChatRoom> allChatRoomList = chatRoomRepository.findAll();
+        List<ChatRoom> allChatRoomList = chatRoomRepository.findAll(Sort.by(Sort.Direction.ASC, "chatRoomId"));
 
         List<ChatRoomResDTO> chatRoomResDTOList = allChatRoomList.stream().map(chatRoom -> {
 

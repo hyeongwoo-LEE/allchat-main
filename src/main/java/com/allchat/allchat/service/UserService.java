@@ -24,9 +24,9 @@ public class UserService {
     public Boolean isDuplicateNickname(String username) {
 
         if(userRepository.findByUsername(username).isPresent()){
-            return true;
-        }else{
             return false;
+        }else{
+            return true;
         }
     }
 

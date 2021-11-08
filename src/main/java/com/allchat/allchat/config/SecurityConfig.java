@@ -53,15 +53,16 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 
         http.addFilter(new LoginFilter(authenticationManager(), jwtUtil()))
-                .addFilter(new JwtAuthorizationFilter(authenticationManager(), jwtUtil(), userRepository));
+                .addFilter(new JwtAuthorizationFilter(authenticationManager(), jwtUtil(), userRepository))
+                .authorizeRequests()
+                .antMatchers("/auth/**").permitAll()
+                .antMatchers("/kauth/**").permitAll()
+                .anyRequest().authenticated(); // /auth/** 이외 모두 인증 필수.
 
         http.exceptionHandling()
                 .authenticationEntryPoint(jwtAuthenticationEntryPoint);
 
-        http.authorizeRequests()
-                .antMatchers("/auth/**").permitAll()
-                .antMatchers("/kauth/**").permitAll()
-                .anyRequest().authenticated(); // /auth/** 이외 모두 인증 필수.
+
 
 
     }

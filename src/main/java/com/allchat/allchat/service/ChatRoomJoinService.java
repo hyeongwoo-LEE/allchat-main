@@ -52,6 +52,9 @@ public class ChatRoomJoinService {
         chatRoomJoinRepository.delete(chatRoomId, principalId);
     }
 
+    /**
+     * 채팅방 참여자 리스트
+     */
     @Transactional(readOnly = true)
     public List<ChatRoomJoinResDTO> getParticipantList(Long chatRoomId){
 

@@ -35,8 +35,7 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
         this.jwtUtil = jwtUtil;
         this.userRepository = userRepository;
     }
-
-    @Transactional
+    //인증이나 권한이 필요한 주소요청이 있을 대 해당 필터를 타게됨
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
                                     FilterChain chain) throws IOException, ServletException {
