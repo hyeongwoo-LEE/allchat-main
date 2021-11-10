@@ -8,6 +8,7 @@ import com.allchat.allchat.domain.chatRoomJoin.RoleType;
 import com.allchat.allchat.domain.user.User;
 import com.allchat.allchat.domain.user.UserRepository;
 import com.allchat.allchat.dto.chatRoomJoin.ChatRoomJoinResDTO;
+import com.allchat.allchat.dto.chatRoomJoin.ChatRoomJoinTimeDTO;
 import com.allchat.allchat.handler.exception.CustomException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -75,6 +76,18 @@ public class ChatRoomJoinService {
                         entityToDTO((ChatRoomJoin) obj[0], (User) obj[1])).collect(Collectors.toList());
 
         return chatRoomJoinResDTOList;
+    }
+
+    /**
+     * 채팅방 입장 시간 조회
+     */
+    @Transactional(readOnly = true)
+    public ChatRoomJoinTimeDTO getJoinTime(Long roomId, Long principalId){
+
+        ChatRoomJoin chatRoomJoin = chatRoomJoinRepository.findByChatRoomIdAndUserId(roomId, principalId);
+
+        return chatRoomJoin.toJoinTimeDTO();
+
     }
 
     private ChatRoomJoinResDTO entityToDTO(ChatRoomJoin chatRoomJoin, User user) {

@@ -9,10 +9,12 @@ import com.allchat.allchat.domain.user.User;
 import com.allchat.allchat.domain.user.UserRepository;
 import com.allchat.allchat.dto.chatRoom.ChatRoomDTO;
 import com.allchat.allchat.dto.chatRoomJoin.ChatRoomJoinResDTO;
+import com.allchat.allchat.dto.chatRoomJoin.ChatRoomJoinTimeDTO;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.Commit;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
@@ -111,6 +113,48 @@ class ChatRoomJoinServiceTest {
         Assertions.assertThat(result.size()).isEqualTo(4);
     }
 
+    @Test
+    void 채팅방_입장시간_조회() throws Exception{
+        //given
+        //방장 생성
+        User master = createUser("방장");
+
+        //채팅방 생성
+        ChatRoom chatRoom = createChatRoom(master, "들어오세요");
+
+        //참여자 생성
+        User user = createUser("participantUser");
+
+        //chatRoomJoin 생성
+        ChatRoomJoin chatRoomJoin = ChatRoomJoin.builder()
+                .user(user)
+                .role(RoleType.GUEST)
+                .build();
+
+        chatRoomJoin.setChatRoom(chatRoom);
+        chatRoomJoinRepository.save(chatRoomJoin);
+
+
+
+        //when
+        ChatRoomJoinTimeDTO joinTimeDTO = chatRoomJoinService.getJoinTime(chatRoom.getChatRoomId(), user.getUserId());
+
+        //then
+        Assertions.assertThat(joinTimeDTO.getUsername()).isEqualTo(user.getUsername());
+        Assertions.assertThat(joinTimeDTO.getJoinDateTime()).isEqualTo(chatRoomJoin.getRegDate());
+    }
+
+/*
+    @Test
+    void test() throws Exception{
+        //given
+
+        //when
+        ChatRoomJoinTimeDTO joinTimeDTO = chatRoomJoinService.getJoinTime(2L, 4L);
+        //then
+        System.out.println(joinTimeDTO);
+    }
+*/
     private ChatRoomJoin createChatRoomJoin(ChatRoom chatRoom, User user) {
 
         ChatRoomJoin chatRoomJoin = ChatRoomJoin.builder()

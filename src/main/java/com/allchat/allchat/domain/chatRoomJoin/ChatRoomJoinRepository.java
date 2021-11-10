@@ -23,4 +23,9 @@ public interface ChatRoomJoinRepository extends JpaRepository<ChatRoomJoin, Long
     List<Object[]> getParticipantList(Long chatRoomId);
 
     boolean existsByChatRoomAndUser(ChatRoom chatRoom, User user);
+
+    @Query("select crj from ChatRoomJoin crj " +
+            "left join fetch crj.user " +
+            "where crj.chatRoom.chatRoomId = :chatRoomId and crj.user.userId = :userId")
+    ChatRoomJoin findByChatRoomIdAndUserId(Long chatRoomId, Long userId);
 }

@@ -1,8 +1,10 @@
 package com.allchat.allchat.domain.chatRoomJoin;
 
+import com.allchat.allchat.domain.BaseEntity;
 import com.allchat.allchat.domain.chatRoom.ChatRoom;
 import com.allchat.allchat.domain.user.User;
 import com.allchat.allchat.dto.chatRoomJoin.ChatRoomJoinResDTO;
+import com.allchat.allchat.dto.chatRoomJoin.ChatRoomJoinTimeDTO;
 import lombok.*;
 
 import javax.persistence.*;
@@ -13,7 +15,7 @@ import javax.persistence.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-public class ChatRoomJoin {
+public class ChatRoomJoin extends BaseEntity {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long joinId;
@@ -34,6 +36,14 @@ public class ChatRoomJoin {
     public void setChatRoom(ChatRoom chatRoom){
         this.chatRoom = chatRoom;
         chatRoom.getParticipantList().add(this);
+    }
+
+    public ChatRoomJoinTimeDTO toJoinTimeDTO(){
+
+        return ChatRoomJoinTimeDTO.builder()
+                .username(user.getUsername())
+                .joinDateTime(this.getRegDate())
+                .build();
     }
 
 }

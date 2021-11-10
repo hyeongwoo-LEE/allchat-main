@@ -5,6 +5,7 @@ import com.allchat.allchat.config.auth.PrincipalDetails;
 import com.allchat.allchat.dto.CMRespDTO;
 import com.allchat.allchat.dto.chatRoomJoin.ChatRoomJoinDTO;
 import com.allchat.allchat.dto.chatRoomJoin.ChatRoomJoinResDTO;
+import com.allchat.allchat.dto.chatRoomJoin.ChatRoomJoinTimeDTO;
 import com.allchat.allchat.handler.exception.CustomException;
 import com.allchat.allchat.service.ChatRoomJoinService;
 import lombok.RequiredArgsConstructor;
@@ -67,5 +68,24 @@ public class ChatRoomJoinController {
 
         return new ResponseEntity<>(new CMRespDTO<>(1, "채팅방 나가기 성공", null), HttpStatus.OK);
     }
+
+    /**
+     * 채팅방 입장 시간 조회
+     */
+    @GetMapping("/chatrooms/{chatRoomId}/joins/time")
+    public ResponseEntity<?> getJoinTime(@PathVariable Long chatRoomId,
+                                         @RequestParam Long userId,
+                                         @AuthenticationPrincipal PrincipalDetails principalDetails){
+
+        if(!principalDetails.getUser().getUserId().equals(userId)){
+            throw new CustomException("조회 권한이 없습니다.");
+        }
+
+        ChatRoomJoinTimeDTO joinTimeDTO = chatRoomJoinService.getJoinTime(chatRoomId, userId);
+
+        return new ResponseEntity<>(new CMRespDTO<>(1, "입장시간 불러오기 성공", joinTimeDTO), HttpStatus.OK);
+    }
+
+
 
 }
