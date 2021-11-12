@@ -68,7 +68,7 @@ public class AuthController {
     /**
      * 카카오 로그인
      */
-    @PostMapping("/login/kakao")
+    @GetMapping("/login/kakao")
     public ResponseEntity<?> kakaoLogin(@RequestParam("code") String code) throws JsonProcessingException, UnsupportedEncodingException {
 
         //POST 방식으로 key=value 데이터를 요청 (카카오쪽으로)
