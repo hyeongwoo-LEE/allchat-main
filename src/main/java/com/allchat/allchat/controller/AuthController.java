@@ -71,6 +71,8 @@ public class AuthController {
     @GetMapping("/login/kakao")
     public ResponseEntity<?> kakaoLogin(@RequestParam("code") String code) throws JsonProcessingException, UnsupportedEncodingException {
 
+        System.out.println(code);
+
         //POST 방식으로 key=value 데이터를 요청 (카카오쪽으로)
         RestTemplate rt = new RestTemplate();
 
@@ -84,7 +86,7 @@ public class AuthController {
 
         params.add("grant_type", "authorization_code");
         params.add("client_id", "3e716bc2780a7b5fe1da319c4487c6f9");
-        params.add("redirect_uri", "http://localhost:9090/auth/kakao/callback");
+        params.add("redirect_uri", "http://localhost:3000/");
         params.add("code", code);
 
         //HttpHeader와 HttpBody를 하나의 오브젝트에 담기
