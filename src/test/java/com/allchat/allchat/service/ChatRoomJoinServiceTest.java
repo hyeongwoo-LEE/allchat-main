@@ -26,7 +26,7 @@ import static org.junit.jupiter.api.Assertions.*;
 @Transactional
 @SpringBootTest
 class ChatRoomJoinServiceTest {
-
+/*
     @Autowired ChatRoomJoinService chatRoomJoinService;
     @Autowired UserRepository userRepository;
     @Autowired ChatRoomRepository chatRoomRepository;
@@ -154,7 +154,7 @@ class ChatRoomJoinServiceTest {
         //then
         System.out.println(joinTimeDTO);
     }
-*/
+
     private ChatRoomJoin createChatRoomJoin(ChatRoom chatRoom, User user) {
 
         ChatRoomJoin chatRoomJoin = ChatRoomJoin.builder()
@@ -190,5 +190,5 @@ class ChatRoomJoinServiceTest {
 
         return user;
     }
-
+*/
 }

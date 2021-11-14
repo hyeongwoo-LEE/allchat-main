@@ -26,7 +26,7 @@ import static org.junit.jupiter.api.Assertions.*;
 @Transactional
 @SpringBootTest
 class ChatRoomServiceTest {
-
+/*
     @Autowired ChatRoomService chatRoomService;
     @Autowired UserRepository userRepository;
     @Autowired ChatRoomJoinRepository chatRoomJoinRepository;
@@ -138,6 +138,7 @@ class ChatRoomServiceTest {
          * chatRoom3 - 참여인원 1
          */
 
+    /*
         //when
         List<ChatRoomResDTO> result = chatRoomService.getAllChatRoomList(currentUser.getUserId());
 
@@ -163,7 +164,7 @@ class ChatRoomServiceTest {
             System.out.println(chatRoomResDTO);
         }
     }*/
-
+/*
     @Test
     void 참여중_채티방리스트() throws Exception{
         //given
@@ -214,7 +215,7 @@ class ChatRoomServiceTest {
          * chatRoom2 - 참여인원 3 (현재사용유저 포함 - participantState - true)
          * chatRoom3 - 참여인원 1
          */
-
+/*
         //when
         List<ChatRoomResDTO> result = chatRoomService.getJoinChatRoomList(currentUser.getUserId());
 
@@ -239,7 +240,7 @@ class ChatRoomServiceTest {
             System.out.println(chatRoomResDTO);
         }
     }*/
-
+/*
     private ChatRoom createChatRoom(User master, String title) {
 
         ChatRoomDTO chatRoomDTO = ChatRoomDTO.builder()
@@ -264,7 +265,7 @@ class ChatRoomServiceTest {
         return user;
     }
 
-
+*/
 
 
 }
